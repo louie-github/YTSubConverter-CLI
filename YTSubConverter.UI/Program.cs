@@ -18,13 +18,15 @@ namespace Arc.YTSubConverter.UI
         internal static void Main(string[] args)
         {
             PreloadResources();
+            
+            RunCommandLine(args);
+            return;
 
-            if (args.Length > 0)
-            {
-                RunCommandLine(args);
-                return;
-            }
+        }
 
+        private static void PrintUsageString() {
+            string ScriptName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+            Console.WriteLine("Usage: " + ScriptName + " [--visual] INPUT OUTPUT");
         }
 
         private static void RunCommandLine(string[] args)
@@ -84,12 +86,14 @@ namespace Arc.YTSubConverter.UI
 
             if (filePaths.Count == 0)
             {
-                Console.WriteLine("Please specify a source file.");
+                PrintUsageString();
+                Console.WriteLine("Please specify an INPUT file.");
                 return null;
             }
 
             if (filePaths.Count > 2)
             {
+                PrintUsageString();
                 Console.WriteLine("Too many file paths specified.");
                 return null;
             }
