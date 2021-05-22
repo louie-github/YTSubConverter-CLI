@@ -1,11 +1,12 @@
-﻿using System;
+﻿#define WINDOWS
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Arc.YTSubConverter.Formats;
 using Arc.YTSubConverter.Formats.Ass;
 
@@ -24,9 +25,6 @@ namespace Arc.YTSubConverter.UI
                 return;
             }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
         }
 
         private static void RunCommandLine(string[] args)
@@ -123,7 +121,6 @@ namespace Arc.YTSubConverter.UI
         private static void PreloadResources()
         {
             PreloadResources<YTSubConverter.Resources>(YTSubConverter.Resources.ResourceManager);
-            PreloadResources<Resources>(Resources.ResourceManager);
         }
 
         private static void PreloadResources<TResources>(ResourceManager resourceManager)
@@ -145,8 +142,12 @@ namespace Arc.YTSubConverter.UI
             }
         }
 
+#if WINDOWS
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
+#else
+        private static bool AttachConsole(int dwProcessId) { return true; }
+#endif
 
         private const int ATTACH_PARENT_PROCESS = -1;
 
