@@ -40,9 +40,8 @@ jobs:
     strategy:
       matrix:
         rid:
-          - osx-x64
-          - linux-x64
-          - linux-musl-x64
+          - win-x86
+          - win-x64
           # TODO: Add ARM versions (and test if they work)
 
     steps:
