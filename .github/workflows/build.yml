@@ -1,10 +1,10 @@
 name: "Test, build, and publish"
 
 on:
-  - push:
+  push:
     branches:
-      - main
-  - release:
+      - master
+  release:
     types:
       - created
 
