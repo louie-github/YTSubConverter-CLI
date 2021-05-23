@@ -57,6 +57,6 @@ using System.Runtime.InteropServices;
 // revision numbers to defaults:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.5.2")]
-[assembly: AssemblyFileVersion("1.5.2")]
+[assembly: AssemblyFileVersion("1.5.2.1")]
 [assembly: InternalsVisibleTo("YTSubConverter.Tests")]
 [assembly: NeutralResourcesLanguage("")]
