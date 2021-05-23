@@ -4,6 +4,11 @@ A command-line only cross-platform .NET 5 version of YTSubConverter.
 Converted with the help of the
 [.NET Upgrade Assistant](https://github.com/dotnet/upgrade-assistant).
 
+If you are looking for pre-built binaries (currently at pre-release),
+feel free to have a look at the
+[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page.
+
 This project is licensed under the MIT License. See the
 [LICENSE](LICENSE) file for details.
 
