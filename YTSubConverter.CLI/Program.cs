@@ -14,17 +14,20 @@ namespace Arc.YTSubConverter.CLI
 {
     internal static class Program
     {
+        // I really do not know whether I can remove this or not, or
+        // whether I *should* remove it or not.
         [STAThread]
         internal static void Main(string[] args)
         {
             PreloadResources();
-            
+
             RunCommandLine(args);
             return;
 
         }
 
-        private static void PrintUsageString() {
+        private static void PrintUsageString()
+        {
             string ScriptName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
             Console.WriteLine("Usage: " + ScriptName + " [--visual] INPUT OUTPUT");
         }
