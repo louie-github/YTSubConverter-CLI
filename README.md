@@ -1,15 +1,32 @@
 # YTSubConverter-CLI
 A command-line only .NET 5 version of YTSubConverter. Converted using the .NET Upgrade Assistant.
 
-Original program (YTSubConverter) by arcusmaximus: https://github.com/arcusmaximus/YTSubConverter/
+## Disclaimer
+This program is in an ***early alpha*** stage and ***IS NOT GUARANTEED TO FUNCTION PROPERLY***.
+and whose behavior ***may not match the original YTSubConverter*** program.
 
-_NOTE: I do not know anything about C# or WinForms apps, so I'm mostly
-just guessing what to change and depending on automated / GUI apps like
-Visual Studio. If you have any suggestions, criticisms, or painfully
-obvious things to point out, ***please*** tell me by opening an issue
-or the like. Thank you!_
+If you need reliability, please use the original program (YTSubConverter) by arcusmaximus:
+https://github.com/arcusmaximus/YTSubConverter/
 
-The original README.md is shown below.
+Use the provided code and builds at your own risk. While I try to test
+everything and ensure that everything builds and runs, I do not know
+much about C#, .NET, etc. so I'm mostly just guessing what to change
+and depending on automated / GUI apps like Visual Studio. If you have
+any suggestions, criticisms, or painfully obvious things to point out,
+***please*** feel free to inform me by opening an issue, pull request,
+or the like. Thank you, and have fun using the program!
+
+*Don't forget to check out the
+[original program](https://github.com/arcusmaximus/YTSubConverter/) and
+consider giving it a star. All the actual code that converts between the
+subtitle formats were written by arcusmaximus.*
+
+## Known issues / quirks
+ - Floating point calculations may differ between operating systems.
+
+The original README.md is shown below. Note that all links from this
+point onwards will refer to the
+[original repository](https://github.com/arcusmaximus/YTSubConverter/).
 
 # YTSubConverter
 A tool for creating styled YouTube subtitles.
