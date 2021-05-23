@@ -23,6 +23,14 @@ subtitle formats were written by arcusmaximus.*
 
 ## Known issues / quirks
  - Floating point calculations may differ between operating systems.
+ - Startup time and/or performance for "portable-single-file" builds
+   may be slower than the original program. Since ILMerge was removed,
+   the necessary `.dlls` have to be extracted at each startup.
+   To avoid this, you can either use the regular "portable" builds
+   which include the `.dlls` along with the executable, or use the
+   "non-portable" builds which require the .NET 5.0 runtime to be
+   installed to run.
+
 
 The original README.md is shown below. Note that all links from this
 point onwards will refer to the
