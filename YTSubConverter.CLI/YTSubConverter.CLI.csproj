@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\packages\ILMerge.3.0.29\build\ILMerge.props" Condition="Exists('..\packages\ILMerge.3.0.29\build\ILMerge.props')" />
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
@@ -32,24 +31,7 @@
     <ProjectReference Include="..\YTSubConverter\YTSubConverter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILMerge" Version="3.0.29" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
   </ItemGroup>
-  <Target Name="YTSC_MergeLogicDLL">
-    <Exec Command="$(ILMergeConsolePath) /ndebug /out:&quot;$(TargetDir)YTSubConverter.exe&quot; &quot;$(TargetDir)YTSubConverter.UI.exe&quot; &quot;$(TargetDir)YTSubConverter.dll&quot;" />
-    <Delete Files="$(TargetDir)YTSubConverter.UI.exe;$(TargetDir)YTSubConverter.dll" />
-  </Target>
-  <Target Name="YTSC_GetResourceDLLs">
-    <ItemGroup>
-      <YTSC_ResourceFile Include="$(TargetDir)*\*.resources.dll" />
-    </ItemGroup>
-  </Target>
-  <Target Name="YTSC_MergeResourceDLLs" DependsOnTargets="YTSC_GetResourceDLLs" Outputs="%(YTSC_ResourceFile.Identity)">
-    <Move SourceFiles="$(TargetDir)YTSubConverter.exe" DestinationFiles="$(TargetDir)YTSubConverter.UI.exe" />
-    <Exec Command="$(ILMergeConsolePath) /ndebug /out:&quot;$(TargetDir)YTSubConverter.exe&quot; &quot;$(TargetDir)YTSubConverter.UI.exe&quot; &quot;%(YTSC_ResourceFile.Identity)&quot;" />
-    <Delete Files="$(TargetDir)YTSubConverter.UI.exe;%(YTSC_ResourceFile.Identity)" />
-  </Target>
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'" DependsOnTargets="YTSC_MergeLogicDLL;YTSC_MergeResourceDLLs">
-  </Target>
 </Project>

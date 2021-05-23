@@ -122,6 +122,8 @@ namespace Arc.YTSubConverter.CLI
         /// <summary>
         /// Manually load the resources available in the .exe so the ILMerged release build doesn't need satellite assemblies anymore
         /// </summary>
+        // Not exactly sure if we still need this since we aren't using
+        // ILMerge anymore.
         private static void PreloadResources()
         {
             PreloadResources<YTSubConverter.Resources>(YTSubConverter.Resources.ResourceManager);
