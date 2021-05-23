@@ -3,6 +3,8 @@ name: "Test, build, and publish"
 on:
   push:
     branches:
+      # TODO: Change branch name to main, maybe, to align with GitHub
+      # defaults.
       - master
   release:
     types:
@@ -22,12 +24,15 @@ jobs:
           dotnet-version: 5.0.x
       - name: Install dependencies
         run: dotnet restore
+      - name: Remove Windows preprocessor directives
+        run: sh remove_windows_directives.sh
       - name: Build project
         run: dotnet build
       - name: Run NUnit tests via dotnet CLI
         run: dotnet test
+        # TODO: Test actual program
 
-  publish-portable-single-file:
+  publish-portable-single-file-windows:
     needs: build-and-test
     runs-on: ubuntu-latest
     env:
@@ -35,8 +40,6 @@ jobs:
     strategy:
       matrix:
         rid:
-          - win-x86
-          - win-x64
           - osx-x64
           - linux-x64
           - linux-musl-x64
@@ -48,6 +51,46 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
+
+      - name: Publish CLI project via dotnet CLI
+        env:
+          RID: ${{ matrix.rid }}
+        run: |
+          dotnet publish -c Release -r "$RID" \
+          /p:PublishSingleFile=true \
+          /p:IncludeAllContentForSelfExtract=true \
+          --self-contained true \
+          ./YTSubConverter.CLI/YTSubConverter.CLI.csproj
+
+      - name: Upload artifacts from dotnet publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: dotnet-publish-${{ matrix.rid }}-portable-single-file
+          path: YTSubConverter.CLI/bin/Release/net5.0/${{ matrix.rid }}/publish/
+
+  # TODO: Combine with the above build step by using if condition
+  # to remove Windows preprocessor directives
+  publish-portable-single-file:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        rid:
+          - osx-x64
+          - linux-x64
+          - linux-musl-x64
+          # TODO: Add ARM versions (and test if they work)
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Remove Windows preprocessor directives
+        run: sh remove_windows_directives.sh
 
       - name: Publish CLI project via dotnet CLI
         env:
