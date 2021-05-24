@@ -29,10 +29,10 @@ FLAGS_NON_PORTABLE = ["--self-contained", "false"]
 # as per Single-file Publish .NET Design Proposal:
 # https://github.com/dotnet/designs/blob/main/accepted/2020/single-file/design.md
 FLAGS_SINGLE_FILE = [
-    "/p:PublishSingleFile=true",
+    "-p:PublishSingleFile=true",
     # The proposal says we don't need this on Linux, but when I remove
     # it, an extra library is generated in the publish folder. Weird.
-    "/p:IncludeNativeLibrariesForSelfExtract=true",
+    "-p:IncludeNativeLibrariesForSelfExtract=true",
 ]
 FILES_WITH_WINDOWS_SYMBOLS = ["YTSubConverter.CLI/Program.cs"]
 
