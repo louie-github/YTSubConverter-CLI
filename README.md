@@ -4,15 +4,25 @@ A command-line only cross-platform .NET 5 version of YTSubConverter.
 Converted with the help of the
 [.NET Upgrade Assistant](https://github.com/dotnet/upgrade-assistant).
 
-If you are looking for pre-built binaries (currently at pre-release),
-feel free to have a look at the
-[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
-page.
+If you are looking for pre-built binaries, feel free to have a look at
+the [Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page. A quick explanation of the binaries:
+
+1. non-portable - Builds which require the .NET 5.0 runtime to be
+   installed separately on the system to run.
+2. portable - Builds which embed the .NET 5.0 runtime into the binary
+   and do not require that the runtime be installed separately.
+3. single-file - Builds which extract the necessary library files on
+   every startup to a temporary directory before running.
+   These have the advantage of only being a single file, rather than
+   a package of one binary accompanied by several library files.
+   See [Known issues/quirks](#known-issues--quirks), however,
+   for some caveats to this type of build.
 
 This project is licensed under the MIT License. See the
 [LICENSE](LICENSE) file for details.
 
-## Disclaimer
+## Differences from YTSubConverter
 
 No changes were made to the inner `YTSubConverter` library, only the
 `YTSubConverter.UI` code, so you can be _99% confident_ that everything
@@ -20,41 +30,51 @@ will work as intended. The aforementioned changes to the UI include
 very simple and minor changes to:
 
 - Remove the UI elements (WinForms)
-- Add a usage string (TODO: Add more command line functionality)
+- Add a usage string for the command line
 - Remove or conditionally disable some Windows-specific code (e.g. COM
   interop, `kernel32.dll`)
 
 The new CLI-only project `YTSubConverter.CLI` should otherwise function
 identically to the original YTSubConverter program, with the main
-benefit being that it is now **cross-platform!**
+benefit being that it is now **cross-platform!** 🎉🎉🥳
+_[thank you .NET 5!]_
 
-If you need even more reliability, however, please use the original
-(currently) Windows-only program YTSubConverter by arcusmaximus:
+However, if you need even more reliability, please use the **original**
+currently Windows-only program YTSubConverter by arcusmaximus:
 https://github.com/arcusmaximus/YTSubConverter/
 
-Use the provided code and builds at your own risk. While I try to test
-everything and ensure that everything builds and runs, I do not know
-much about C#, .NET, etc. so I'm mostly just guessing what to change
-and depending on automated / GUI apps like Visual Studio. If you have
-any suggestions, criticisms, or painfully obvious things to point out,
-**_please_** feel free to inform me by opening an issue, pull request,
-or the like. Thank you, and have fun using the program!
+## Disclaimer
+
+> Use the provided code and builds at your own risk. While I try to test
+> everything and ensure that everything builds and runs, I do not know
+> much about C#, .NET, etc. so I'm mostly just guessing what to change
+> and depending on automated / GUI apps like Visual Studio. If you have
+> any suggestions, criticisms, or painfully obvious things to point out,
+> **_please_** feel free to inform me by opening an issue, pull request,
+> or the like. Thank you, and have fun using the program!
 
 _Don't forget to check out the
 [original program](https://github.com/arcusmaximus/YTSubConverter/) and
-consider giving it a star. All the actual code that converts between the
-subtitle formats were written by arcusmaximus._
+consider giving it a star⭐!
+All the actual code that converts between the subtitle formats was
+written by arcusmaximus._
 
 ## Known issues / quirks
 
 - Floating point calculations may differ between operating systems.
-- Startup time and/or performance for "portable-single-file" builds
-  may be slower than the original program. Since ILMerge was removed,
-  the necessary `.dlls` have to be extracted at each startup.
-  To avoid this, you can either use the regular "portable" builds
-  which include the `.dlls` along with the executable, or use the
-  "non-portable" builds which require the .NET 5.0 runtime to be
-  installed to run.
+  Therefore, the same input subtitle files may result in different
+  output data depending on the operating system.
+  _This, I believe, is a C# limitation. Correct me if I'm wrong._
+- Startup time for single-file builds **may** _(not yet proven)_ be
+  slower than the original `YTSubConverter` program.
+  Since `ILMerge` was removed, the necessary `.dll`s have to be
+  extracted at each startup to a temporary directory before the
+  executable is run.
+  To mitigate this, you can use the non-single-file builds which package
+  the `.dll`s along with the executable, rather than extracting them on
+  each startup.
+
+## Original README
 
 The original README.md is shown below. Note that all links from this
 point onwards will refer to the
