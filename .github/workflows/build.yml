@@ -38,7 +38,6 @@ jobs:
           ./YTSubConverter.CLI/YTSubConverter.CLI.csproj && \
           ./.tmp-build-test/YTSubConverter.CLI
 
-
   # TODO: Package LICENSE and THIRD-PARTY-NOTICES.txt along with
   # the releases / artifacts
   publish-non-portable:
@@ -83,8 +82,7 @@ jobs:
           name: ${{ matrix.runtime }}-non-portable
           path: publish/
 
-
-  publish-non-portable:
+  publish-non-portable-single-file:
     needs: build-and-test
     runs-on: ubuntu-latest
     env:
@@ -125,7 +123,6 @@ jobs:
         with:
           name: ${{ matrix.runtime }}-non-portable-single-file
           path: publish/
-
 
   publish-portable:
     needs: build-and-test
@@ -168,7 +165,6 @@ jobs:
         with:
           name: ${{ matrix.runtime }}-portable
           path: publish/
-
 
   publish-portable-single-file:
     needs: build-and-test
