@@ -14,8 +14,6 @@ from typing import Iterable, Optional, Union
 
 # Build target / Runtime Identifier (RID)
 # Reference: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-WORKING_DIRECTORY = Path(__file__).parent
-os.chdir(WORKING_DIRECTORY)
 OUTPUT_DIRECTORY = "build"
 
 DOTNET_PUBLISH_COMMAND = ["dotnet", "publish"]
