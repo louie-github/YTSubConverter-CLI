@@ -6,7 +6,6 @@ on:
       # TODO: Change branch name to main, maybe, to align with GitHub
       # defaults. I don't want to, unless the original project does so.
       - master
-      - dev
 
 jobs:
   build-and-test:
