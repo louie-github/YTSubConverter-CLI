@@ -20,22 +20,22 @@ LICENSE.txt file to ensure that all possible configurations, and
 therefore, necessary license notices, are accounted for.
 
 To clarify, if the license notice of a package is listed below, it shall
-not be construed or interpreted to mean that package is *necessarily*
-included in any specific build, configuration, or distribution of the
-program, but only that it *may possibly* be included in such.
+not be construed or interpreted to mean that that package is
+*necessarily* included in any specific build, configuration, or
+distribution of the program, but only that it *may possibly* be included
+in such.
 
 Please contact the authors of this project if there are missing license
-notices from any packages that were used.
+notices from any packages that are used, or if the project fails to
+comply with the licenses of any packages that are used.
 
 The relevant notices are listed below for informational purposes.
-
-
 ------------------------------------------------------------------------
 
 
-License notice for .NET Runtime, along with several other NuGet packages:
-.NET Runtime, Microsoft.CSharp, Microsoft.Windows.Compatibility,
-Microsoft.XmlSerializer.Generator, and System.Data.DataSetExtensions:
+License notice for .NET Runtime, along with several other NuGet packages
+(.NET Runtime, Microsoft.CSharp, Microsoft.Windows.Compatibility,
+Microsoft.XmlSerializer.Generator, and System.Data.DataSetExtensions)
 https://github.com/dotnet/runtime/blob/main/LICENSE.TXT
 -------------------------------
 The MIT License (MIT)

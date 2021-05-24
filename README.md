@@ -19,15 +19,23 @@ page. A quick explanation of the binaries:
    See [Known issues/quirks](#known-issues--quirks), however,
    for some caveats to this type of build.
 
+## License
+
 This project is licensed under the MIT License. See the
 [LICENSE](LICENSE) file for details. This project also includes some
 external dependencies whose license notices can be found in the
 [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES) file.
 
-By using this project, you agree to abide by these terms and conditions,
-as well as include said LICENSE and THIRD-PARTY-NOTICES files whenever
-you redistribute the program, in accordance with the MIT License and
-other related licenses.
+By using this project, downloading, and/or using its binaries found on
+the [Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page, you agree to abide by these terms and conditions, as well as the
+terms and conditions of any external dependencies that may be included
+or used in the resulting program.
+
+The project authors recommend that you include in their entirety the
+abovementioned [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES)
+files whenever you redistribute the program to make it easier to comply
+with all the necessary licenses, terms, and conditions.
 
 ## Differences from YTSubConverter
 
