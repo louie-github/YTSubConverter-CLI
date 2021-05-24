@@ -20,9 +20,20 @@ page. A quick explanation of the binaries:
    for some caveats to this type of build.
 
 This project is licensed under the MIT License. See the
-[LICENSE](LICENSE) file for details.
+[LICENSE](LICENSE) file for details. This project also includes some
+external dependencies whose license notices can be found in the
+[THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES) file.
+
+By using this project, you agree to abide by these terms and conditions,
+as well as include said LICENSE and THIRD-PARTY-NOTICES files whenever
+you redistribute the program, in accordance with the MIT License and
+other related licenses.
 
 ## Differences from YTSubConverter
+
+In short, this is a command-line only version of YTSubConverter that
+can work not only on Windows, but on all other platforms which support
+.NET 5.0.
 
 No changes were made to the inner `YTSubConverter` library, only the
 `YTSubConverter.UI` code, so you can be _99% confident_ that everything

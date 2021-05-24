@@ -39,6 +39,8 @@ jobs:
           ./.tmp-build-test/YTSubConverter.CLI
 
 
+  # TODO: Package LICENSE and THIRD-PARTY-NOTICES.txt along with
+  # the releases / artifacts
   publish-non-portable:
     needs: build-and-test
     runs-on: ubuntu-latest
