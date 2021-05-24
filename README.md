@@ -14,10 +14,22 @@ This project is licensed under the MIT License. See the
 
 ## Disclaimer
 
-This program is in an **_early alpha_** stage and **_IS NOT GUARANTEED TO FUNCTION PROPERLY_**.
-and whose behavior **_may not match the original YTSubConverter_** program.
+No changes were made to the inner `YTSubConverter` library, only the
+`YTSubConverter.UI` code, so you can be _99% confident_ that everything
+will work as intended. The aforementioned changes to the UI include
+very simple and minor changes to:
 
-If you need reliability, please use the original program (YTSubConverter) by arcusmaximus:
+- Remove the UI elements (WinForms)
+- Add a usage string (TODO: Add more command line functionality)
+- Remove or conditionally disable some Windows-specific code (e.g. COM
+  interop, `kernel32.dll`)
+
+The new CLI-only project `YTSubConverter.CLI` should otherwise function
+identically to the original YTSubConverter program, with the main
+benefit being that it is now **cross-platform!**
+
+If you need even more reliability, however, please use the original
+(currently) Windows-only program YTSubConverter by arcusmaximus:
 https://github.com/arcusmaximus/YTSubConverter/
 
 Use the provided code and builds at your own risk. While I try to test
