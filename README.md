@@ -5,8 +5,12 @@ Converted with the help of the
 [.NET Upgrade Assistant](https://github.com/dotnet/upgrade-assistant).
 
 If you are looking for pre-built binaries, feel free to have a look at
-the [Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
-page. A quick explanation of the binaries:
+[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page. You can also take a look at the
+[Actions](https://github.com/louie-github/YTSubConverter-CLI/actions)
+page for build artifacts directly from GitHub Actions.
+
+A quick explanation of the binaries:
 
 1. non-portable - Builds which require the .NET 5.0 runtime to be
    installed separately on the system to run.
