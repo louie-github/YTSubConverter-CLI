@@ -211,7 +211,7 @@ def parse_args(args=None):
         "--output",
         help=(
             "The output directory to place the published artifacts in. "
-            'Defaults to "./build".'
+            'Defaults to "./publish".'
         ),
         nargs="?",
         default=str(OUTPUT_DIRECTORY),

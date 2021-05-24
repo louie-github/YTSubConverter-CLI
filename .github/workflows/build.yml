@@ -4,11 +4,9 @@ on:
   push:
     branches:
       # TODO: Change branch name to main, maybe, to align with GitHub
-      # defaults.
+      # defaults. I don't want to, unless the original project does so.
       - master
-  release:
-    types:
-      - created
+      - dev
 
 jobs:
   build-and-test:
@@ -24,51 +22,23 @@ jobs:
           dotnet-version: 5.0.x
       - name: Install dependencies
         run: dotnet restore
+        # TODO: Integrate this into another Python script, or use the
+        # regular publish script and just add an option to only strip
+        # files and do nothing else
       - name: Remove Windows preprocessor directives
         run: sh remove_windows_directives.sh
       - name: Build project
         run: dotnet build
       - name: Run NUnit tests via dotnet CLI
         run: dotnet test
-        # TODO: Test actual program
-
-  publish-portable-single-file-windows:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-    strategy:
-      matrix:
-        rid:
-          - win-x86
-          - win-x64
-          # TODO: Add ARM versions (and test if they work)
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK 5.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-
-      - name: Publish CLI project via dotnet CLI
-        env:
-          RID: ${{ matrix.rid }}
+        # TODO: Test actual program's output
+      - name: Check if program can run
         run: |
-          dotnet publish -c Release -r "$RID" \
-          /p:PublishSingleFile=true \
-          /p:IncludeAllContentForSelfExtract=true \
-          --self-contained true \
-          ./YTSubConverter.CLI/YTSubConverter.CLI.csproj
+          rm -rf .tmp-build-test && mkdir .tmp-build-test && \
+          dotnet build --output .tmp-build-test \
+          ./YTSubConverter.CLI/YTSubConverter.CLI.csproj && \
+          ./.tmp-build-test/YTSubConverter.CLI
 
-      - name: Upload artifacts from dotnet publish
-        uses: actions/upload-artifact@v2
-        with:
-          name: dotnet-publish-${{ matrix.rid }}-portable-single-file
-          path: YTSubConverter.CLI/bin/Release/net5.0/${{ matrix.rid }}/publish/
-
-  # TODO: Combine with the above build step by using if condition
-  # to remove Windows preprocessor directives
   publish-portable-single-file:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -76,7 +46,9 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     strategy:
       matrix:
-        rid:
+        runtime:
+          - win-x64
+          - win-x86
           - osx-x64
           - linux-x64
           - linux-musl-x64
@@ -88,21 +60,23 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-      - name: Remove Windows preprocessor directives
-        run: sh remove_windows_directives.sh
-
-      - name: Publish CLI project via dotnet CLI
+      - name: Setup Python 3 for publish script
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - name: Publish YTSubConverter.CLI project via publish.py script
         env:
-          RID: ${{ matrix.rid }}
+          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
+        # Rely on publish script RID autodetection to automatically
+        # strip WINDOWS symbols from .cs files
         run: |
-          dotnet publish -c Release -r "$RID" \
-          /p:PublishSingleFile=true \
-          /p:IncludeAllContentForSelfExtract=true \
-          --self-contained true \
-          ./YTSubConverter.CLI/YTSubConverter.CLI.csproj
+          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
+          --configuration "Release" --output "publish" \
+          --force-restore --portable --single-file
 
-      - name: Upload artifacts from dotnet publish
+      - name: Upload artifacts from publish directory
         uses: actions/upload-artifact@v2
         with:
-          name: dotnet-publish-${{ matrix.rid }}-portable-single-file
-          path: YTSubConverter.CLI/bin/Release/net5.0/${{ matrix.rid }}/publish/
+          name: ${{ matrix.runtime }}-portable-single-file
+          path: publish/
