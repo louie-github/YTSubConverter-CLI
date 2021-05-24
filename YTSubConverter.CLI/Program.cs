@@ -1,5 +1,5 @@
 ﻿#define WINDOWS
-
+#undef WINDOWS
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,9 +14,6 @@ namespace Arc.YTSubConverter.CLI
 {
     internal static class Program
     {
-        // I really do not know whether I can remove this or not, or
-        // whether I *should* remove it or not.
-        [STAThread]
         internal static void Main(string[] args)
         {
             PreloadResources();
