@@ -325,15 +325,16 @@ def main(argv: bool = None, publish_command: Iterable[str] = DOTNET_PUBLISH_COMM
 
     output_path = Path(args.output)
     if output_path.exists() and output_path.is_file():
-        print(output_path)
         raise NotADirectoryError(
             f"Output directory [{shlex.quote(str(output_path))}] "
             "exists and is a file."
         )
     if not args.keep:
         logger.info(f"Cleaning up build directory [{shlex.quote(str(output_path))}].")
-        shutil.rmtree(output_path, ignore_errors=True)
-    output_path.mkdir(exist_ok=True)
+        if not args.dry_run:
+            shutil.rmtree(output_path, ignore_errors=True)
+    if not args.dry_run:
+        output_path.mkdir(exist_ok=True)
 
     # Generation of final publish command
     if args.force_restore:
@@ -363,10 +364,8 @@ def main(argv: bool = None, publish_command: Iterable[str] = DOTNET_PUBLISH_COMM
 
     publish_command.append(args.project)
 
-    if args.dry_run:
-        logger.info(f"Publish command: {publish_command}")
-    else:
-        logger.info(f"Publish command: {publish_command}")
+    logger.info(f"Publish command: {publish_command}")
+    if not args.dry_run:
         subprocess.run(publish_command)
 
 
