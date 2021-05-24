@@ -39,6 +39,136 @@ jobs:
           ./YTSubConverter.CLI/YTSubConverter.CLI.csproj && \
           ./.tmp-build-test/YTSubConverter.CLI
 
+
+  publish-non-portable:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+          - win-x86
+          - osx-x64
+          - linux-x64
+          - linux-musl-x64
+          # TODO: Add ARM versions (and test if they work)
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Setup Python 3 for publish script
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - name: Publish YTSubConverter.CLI project via publish.py script
+        env:
+          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
+        # Rely on publish script RID auto-detection to automatically
+        # strip WINDOWS symbols from .cs files
+        run: |
+          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
+          --configuration "Release" --output "publish" \
+          --force-restore --non-portable
+
+      - name: Upload artifacts from publish directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.runtime }}-non-portable
+          path: publish/
+
+
+  publish-non-portable:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+          - win-x86
+          - osx-x64
+          - linux-x64
+          - linux-musl-x64
+          # TODO: Add ARM versions (and test if they work)
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Setup Python 3 for publish script
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - name: Publish YTSubConverter.CLI project via publish.py script
+        env:
+          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
+        # Rely on publish script RID auto-detection to automatically
+        # strip WINDOWS symbols from .cs files
+        run: |
+          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
+          --configuration "Release" --output "publish" \
+          --force-restore --non-portable --single-file
+
+      - name: Upload artifacts from publish directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.runtime }}-non-portable-single-file
+          path: publish/
+
+
+  publish-portable:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+          - win-x86
+          - osx-x64
+          - linux-x64
+          - linux-musl-x64
+          # TODO: Add ARM versions (and test if they work)
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Setup Python 3 for publish script
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - name: Publish YTSubConverter.CLI project via publish.py script
+        env:
+          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
+        # Rely on publish script RID auto-detection to automatically
+        # strip WINDOWS symbols from .cs files
+        run: |
+          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
+          --configuration "Release" --output "publish" \
+          --force-restore --portable
+
+      - name: Upload artifacts from publish directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.runtime }}-portable
+          path: publish/
+
+
   publish-portable-single-file:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -68,7 +198,7 @@ jobs:
       - name: Publish YTSubConverter.CLI project via publish.py script
         env:
           RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
-        # Rely on publish script RID autodetection to automatically
+        # Rely on publish script RID auto-detection to automatically
         # strip WINDOWS symbols from .cs files
         run: |
           python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
