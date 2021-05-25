@@ -280,10 +280,11 @@ def parse_args(args=None):
         return parser.parse_args(args)
 
 
-def main(argv: bool = None, publish_command: Iterable[str] = DOTNET_PUBLISH_COMMAND):
+def main(
+    args: argparse.Namespace, publish_command: Iterable[str] = DOTNET_PUBLISH_COMMAND
+):
+    # A more general list.copy for iterables
     publish_command = [s for s in publish_command]
-
-    args = parse_args(argv)
 
     if args.verbose:
         init_logging(level=logging.DEBUG)
@@ -368,4 +369,4 @@ def main(argv: bool = None, publish_command: Iterable[str] = DOTNET_PUBLISH_COMM
 
 
 if __name__ == "__main__":
-    main()
+    main(parse_args())
