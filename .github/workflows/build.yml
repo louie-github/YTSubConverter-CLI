@@ -9,14 +9,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  env:
-    DOTNET_CLI_TELEMETRY_OPTOUT: true
-
   build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Setup .NET Core SDK 5.0
         uses: actions/setup-dotnet@v1
         with:
@@ -63,17 +61,20 @@ jobs:
           # TODO: Add ARM versions (and test if they work)
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Setup .NET Core SDK 5.0
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
+
       - name: Setup Python 3 for publish script
         uses: actions/setup-python@v2
         with:
           python-version: "3.x"
           architecture: "x64"
-        name: Publish YTSubConverter.CLI project via publish.py script
+
+      - name: Publish YTSubConverter.CLI project via publish.py script
         env:
           BUILD_TYPE: ${{ matrix.build_type }}
           RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
@@ -90,7 +91,7 @@ jobs:
 
       - name: Add license notices to publish directory
         run: cp -v LICENSE THIRD-PARTY-NOTICES publish/
-          
+
       - name: Upload artifacts from publish directory
         uses: actions/upload-artifact@v2
         with:
