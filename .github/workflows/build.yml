@@ -6,12 +6,14 @@ on:
       # TODO: Change branch name to main, maybe, to align with GitHub
       # defaults. I don't want to, unless the original project does so.
       - master
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  env:
+    DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+  build_and_test:
     runs-on: ubuntu-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     steps:
       - uses: actions/checkout@v2
@@ -40,13 +42,18 @@ jobs:
 
   # TODO: Package LICENSE and THIRD-PARTY-NOTICES.txt along with
   # the releases / artifacts
-  publish-non-portable:
-    needs: build-and-test
+  publish:
+    needs: build_and_test
     runs-on: ubuntu-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     strategy:
       matrix:
+        build_type:
+          - non-portable
+          - non-portable-single-file
+          - portable
+          - portable-single-file
         runtime:
           - win-x64
           - win-x86
@@ -66,144 +73,23 @@ jobs:
         with:
           python-version: "3.x"
           architecture: "x64"
-      - name: Publish YTSubConverter.CLI project via publish.py script
+        name: Publish YTSubConverter.CLI project via publish.py script
         env:
+          BUILD_TYPE: ${{ matrix.build_type }}
           RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
-        # Rely on publish script RID auto-detection to automatically
-        # strip WINDOWS symbols from .cs files
+        # Rely on publish script's preset build flags for the specified
+        # build types as well as its RID auto-detection for
+        # automatically stripping WINDOWS symbols from .cs files
         run: |
-          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
-          --configuration "Release" --output "publish" \
-          --force-restore --non-portable
+          python publish.py --verbose \
+          --force-restore \
+          --configuration "Release" \
+          --output "publish" \
+          --runtime "$RUNTIME_IDENTIFIER" \
+          --build-type "$BUILD_TYPE"
 
       - name: Upload artifacts from publish directory
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.runtime }}-non-portable
-          path: publish/
-
-  publish-non-portable-single-file:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-    strategy:
-      matrix:
-        runtime:
-          - win-x64
-          - win-x86
-          - osx-x64
-          - linux-x64
-          - linux-musl-x64
-          # TODO: Add ARM versions (and test if they work)
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK 5.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-      - name: Setup Python 3 for publish script
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-          architecture: "x64"
-      - name: Publish YTSubConverter.CLI project via publish.py script
-        env:
-          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
-        # Rely on publish script RID auto-detection to automatically
-        # strip WINDOWS symbols from .cs files
-        run: |
-          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
-          --configuration "Release" --output "publish" \
-          --force-restore --non-portable --single-file
-
-      - name: Upload artifacts from publish directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.runtime }}-non-portable-single-file
-          path: publish/
-
-  publish-portable:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-    strategy:
-      matrix:
-        runtime:
-          - win-x64
-          - win-x86
-          - osx-x64
-          - linux-x64
-          - linux-musl-x64
-          # TODO: Add ARM versions (and test if they work)
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK 5.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-      - name: Setup Python 3 for publish script
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-          architecture: "x64"
-      - name: Publish YTSubConverter.CLI project via publish.py script
-        env:
-          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
-        # Rely on publish script RID auto-detection to automatically
-        # strip WINDOWS symbols from .cs files
-        run: |
-          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
-          --configuration "Release" --output "publish" \
-          --force-restore --portable
-
-      - name: Upload artifacts from publish directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.runtime }}-portable
-          path: publish/
-
-  publish-portable-single-file:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-    strategy:
-      matrix:
-        runtime:
-          - win-x64
-          - win-x86
-          - osx-x64
-          - linux-x64
-          - linux-musl-x64
-          # TODO: Add ARM versions (and test if they work)
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK 5.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-      - name: Setup Python 3 for publish script
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-          architecture: "x64"
-      - name: Publish YTSubConverter.CLI project via publish.py script
-        env:
-          RUNTIME_IDENTIFIER: ${{ matrix.runtime }}
-        # Rely on publish script RID auto-detection to automatically
-        # strip WINDOWS symbols from .cs files
-        run: |
-          python publish.py --verbose --runtime "$RUNTIME_IDENTIFIER" \
-          --configuration "Release" --output "publish" \
-          --force-restore --portable --single-file
-
-      - name: Upload artifacts from publish directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.runtime }}-portable-single-file
           path: publish/

@@ -32,6 +32,12 @@ FLAGS_SINGLE_FILE = [
     # it, an extra library is generated in the publish folder. Weird.
     "-p:IncludeNativeLibrariesForSelfExtract=true",
 ]
+BUILD_TYPES_FLAGS = {
+    "non-portable": FLAGS_NON_PORTABLE,
+    "non-portable-single-file": FLAGS_NON_PORTABLE + FLAGS_SINGLE_FILE,
+    "portable": FLAGS_PORTABLE,
+    "portable-single-file": FLAGS_PORTABLE + FLAGS_SINGLE_FILE,
+}
 FILES_WITH_WINDOWS_SYMBOLS = ["YTSubConverter.CLI/Program.cs"]
 
 GITHUB_ACTIONS = os.environ.get("GITHUB_ACTIONS") == "true"
@@ -221,6 +227,19 @@ def parse_args(args=None):
         action="store_true",
     )
     parser.add_argument(
+        "-b",
+        "--build-type",
+        help=(
+            "The type of build to publish. Overrides more specific "
+            "such as [-p / --portable], [-n / --non-portable], or "
+            "[-s / --single-file]. Currently supported build types "
+            "are: (non-portable, portable, non-portable-single-file, "
+            "portable-single-file)"
+        ),
+        nargs="?",
+        default=None,
+    )
+    parser.add_argument(
         "-f",
         "--force-restore",
         help=(
@@ -291,7 +310,7 @@ def main(
     logger.debug(f"Raw command-line arguments: {args}")
 
     if args.remove_windows_symbols is None:
-        if not args.runtime.startswith("win"):
+        if not args.runtime.startswith("win") or not args.runtime:
             args.remove_windows_symbols = True
             logger.info(
                 "Detected a non-Windows runtime identifer "
@@ -329,9 +348,15 @@ def main(
             "exists and is a file."
         )
     if not args.keep:
-        logger.info(f"Cleaning up build directory [{shlex.quote(str(output_path))}].")
-        if not args.dry_run:
+        if args.dry_run:
+            logger.info(
+                f"Going to clean up build directory [{shlex.quote(str(output_path))}]."
+            )
             shutil.rmtree(output_path, ignore_errors=True)
+        else:
+            logger.info(
+                f"Cleaning up build directory [{shlex.quote(str(output_path))}]."
+            )
     if not args.dry_run:
         output_path.mkdir(exist_ok=True)
 
@@ -348,22 +373,39 @@ def main(
     publish_command.append("--output")
     publish_command.append(args.output)
 
-    if args.single_file:
-        publish_command.extend(FLAGS_SINGLE_FILE)
-    if args.portable:
-        publish_command.extend(FLAGS_PORTABLE)
-    elif args.non_portable:
-        publish_command.extend(FLAGS_NON_PORTABLE)
-    else:
-        logger.warning("The portable build was neither enabled nor disabled.")
-        logger.warning(
-            'Falling back to "dotnet publish" default behavior '
-            "(framework-dependent / non-portable)."
-        )
+    build_flags = []
 
+    if args.build_type:
+        if build_flags:
+            logger.warning(
+                "Overriding build flags [-p / --portable], [-n / "
+                "--non-portable], or [-s / --single-file] with flags "
+                f'for the specified build type "{args.build_type}"'
+            )
+        try:
+            build_flags = BUILD_TYPES_FLAGS[args.build_type]
+        except KeyError:
+            raise KeyError(f'Invalid build type "{args.build_type}"')
+    else:
+        if args.portable:
+            build_flags.extend(FLAGS_PORTABLE)
+        elif args.non_portable:
+            build_flags.extend(FLAGS_NON_PORTABLE)
+        else:
+            logger.warning("The portable build was neither enabled nor disabled.")
+            logger.warning(
+                'Falling back to "dotnet publish" default behavior '
+                "(framework-dependent / non-portable)."
+            )
+
+        if args.single_file:
+            build_flags.extend(FLAGS_SINGLE_FILE)
+
+    publish_command.extend(build_flags)
     publish_command.append(args.project)
 
-    logger.info(f"Publish command: {publish_command}")
+    logger.info(f"Build flags: {build_flags}")
+    logger.info(f"Full publish command: {publish_command}")
     if not args.dry_run:
         subprocess.run(publish_command)
 
