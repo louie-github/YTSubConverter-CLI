@@ -88,8 +88,11 @@ jobs:
           --runtime "$RUNTIME_IDENTIFIER" \
           --build-type "$BUILD_TYPE"
 
+      - name: Add license notices to publish directory
+        run: cp -v LICENSE THIRD-PARTY-NOTICES publish/
+          
       - name: Upload artifacts from publish directory
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.runtime }}-non-portable
+          name: ${{ matrix.runtime }}-${{ matrix.build_type }}
           path: publish/
