@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
 // DeepL translation:
 // If this project is published to COM, the following GUID will be the ID of the typelib
-[assembly: Guid("fe339cad-14bd-43db-a700-5ddc8b75f43b")]
+[assembly: Guid("57cf17d6-169d-44ce-b048-da603206834a")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //
