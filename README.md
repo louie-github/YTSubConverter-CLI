@@ -4,48 +4,22 @@ A command-line only cross-platform .NET 5 version of YTSubConverter.
 Converted with the help of the
 [.NET Upgrade Assistant](https://github.com/dotnet/upgrade-assistant).
 
-If you are looking for pre-built binaries, feel free to have a look at
-[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
-page. You can also take a look at the
-[Actions](https://github.com/louie-github/YTSubConverter-CLI/actions)
-page for build artifacts directly from GitHub Actions.
-
-A quick explanation of the binaries:
-
-1. non-portable - Builds which require the .NET 5.0 runtime to be
-   installed separately on the system to run.
-2. portable - Builds which embed the .NET 5.0 runtime into the binary
-   and do not require that the runtime be installed separately.
-3. single-file - Builds which extract the necessary library files on
-   every startup to a temporary directory before running.
-   These have the advantage of only being a single file, rather than
-   a package of one binary accompanied by several library files.
-   See [Known issues/quirks](#known-issues--quirks), however,
-   for some caveats to this type of build.
-
-## License
-
-This project is licensed under the MIT License. See the
-[LICENSE](LICENSE) file for details. This project also includes some
-external dependencies whose license notices can be found in the
-[THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES) file.
-
-By using this project, downloading, and/or using its binaries found on
-the [Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
-page, you agree to abide by these terms and conditions, as well as the
-terms and conditions of any external dependencies that may be included
-or used in the resulting program.
-
-The project authors recommend that you include in their entirety the
-abovementioned [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES)
-files whenever you redistribute the program to make it easier to comply
-with all the necessary licenses, terms, and conditions.
-
 ## Differences from YTSubConverter
 
 In short, this is a command-line only version of YTSubConverter that
-can work not only on Windows, but on all other platforms which support
-.NET 5.0.
+can work not only on Windows, but on all other desktop platforms which
+support .NET 5.0, including MacOS, and Linux.
+
+We provide [pre-built binaries](#pre-built-binaries) for:
+
+- Windows 32-bit (x86) and 64-bit (x64)
+- OSX 64-bit (minimum macOS 10.12 Sierra)
+- Linux (x64, musl-x64)
+
+You can find these binaries on the
+[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page. See [Pre-built binaries](#pre-built-binaries) for an explanation
+of which package to choose.
 
 No changes were made to the inner `YTSubConverter` library, only the
 `YTSubConverter.UI` code, so you can be _99% confident_ that everything
@@ -65,6 +39,61 @@ _[thank you .NET 5!]_
 However, if you need even more reliability, please use the **original**
 currently Windows-only program YTSubConverter by arcusmaximus:
 https://github.com/arcusmaximus/YTSubConverter/
+
+## Pre-built binaries
+
+If you are looking for pre-built binaries, feel free to have a look at
+[Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page. You can also take a look at the
+[Actions](https://github.com/louie-github/YTSubConverter-CLI/actions)
+page for build artifacts directly from GitHub Actions.
+
+A very quick summary of the available binaries:
+
+- If you want just _one_ file that can run all on its own, choose a
+  build that ends in **single-file**.
+- If you want to run the application without installing the .NET 5.0
+  runtime, choose a build that starts with **portable**.
+- If you are willing to install or have already installed the .NET 5.0
+  runtime on your system, you can choose a build that starts with
+  **non-portable**.
+
+A more detailed explanation of the binaries:
+
+1. non-portable - These builds require the .NET 5.0 runtime to be
+   installed separately on the system to run. They are usually smaller
+   in terms of file size in comparison to the portable builds.
+2. portable - These builds embed the .NET 5.0 runtime into the binary
+   and do not require that the runtime be installed separately. They
+   are usually larger in file size in comparison to the non-portable
+   builds.
+3. single-file - These builds extract the necessary library files on
+   every startup to a temporary directory before running.
+   These have the advantage of only being a single file, rather than
+   a package of one binary accompanied by several library files.
+   See [Known issues/quirks](#known-issues--quirks), however,
+   for some caveats to this type of build.
+
+## License
+
+This project is licensed under the MIT License. See the
+[LICENSE](LICENSE) file for details. This project also includes some
+external dependencies whose license notices can be found in the
+[THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES) file.
+
+By using this project, downloading, and/or using its binaries found on
+the [Releases](https://github.com/louie-github/YTSubConverter-CLI/releases)
+page, you agree to abide by these terms and conditions, as well as the
+terms and conditions of any external dependencies that may be included
+or used in the resulting program.
+
+Release builds include a copy of the LICENSE and THIRD-PARTY-NOTICES
+file found in this project's repository.
+
+The project authors recommend that you include in their entirety the
+aforementioned [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES)
+files whenever you redistribute the program to make it easier to comply
+with all the necessary licenses, terms, and conditions.
 
 ## Disclaimer
 
